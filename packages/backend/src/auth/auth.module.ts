@@ -1,57 +1,82 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Module, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from '../users/users.module';
 import { BlockchainModule } from '../blockchain/blockchain.module';
-
-// Services
-import { AuthService } from './services/auth.service';
-import { WalletAuthService } from './services/wallet-auth.service';
-import { Web3AuthService } from './services/web3-auth.service';
-
-// Strategies
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { WalletStrategy } from './strategies/wallet.strategy';
-
-// Controllers
-import { AuthController } from './controllers/auth.controller';
-import { WalletAuthController } from './controllers/wallet-auth.controller';
-import { Web3AuthController } from './controllers/web3-auth.controller';
-
-// Entities
-import { Session } from './entities/session.entity';
 import { User } from '../users/entities/user.entity';
+import { Wallet } from '../wallets/entities/wallet.entity';
+import { ReferralModule } from '../referral/referral.module';
+import { MailModule } from '../mail/mail.module';
+import { SharedModule } from '../shared/shared.module';
+import { WalletsModule } from '../wallets/wallets.module';
+import { RefreshToken } from './entities/refresh-token.entity';
+import { WalletAuthController } from './controllers/wallet-auth.controller';
+import { WalletAuthDebugController } from './controllers/wallet-auth-debug.controller';
+import { UserDevice } from '../users/entities/user-device.entity';
+import { UserDevicesService } from '../users/services/user-devices.service';
+import { DeviceDetectorService } from '../shared/services/device-detector.service';
+import { ProfileModule } from '../profile/profile.module';
+import { WalletTransactionService } from './services/wallet-transaction.service';
+import { Profile } from '../profile/entities/profile.entity';
+import { SessionSecurityModule } from './modules/session-security.module';
+import { APP_GUARD } from '@nestjs/core';
+import { SessionSecurityGuard } from './guards/session-security.guard';
+import { TokenModule } from '../token/token.module';
+import { TokenService } from './services/token.service';
+import { UserSessionsService } from '../users/services/user-sessions.service';
 
 @Module({
   imports: [
-    UsersModule,
-    BlockchainModule,
-    PassportModule,
-    TypeOrmModule.forFeature([Session, User]),
+    TypeOrmModule.forFeature([User, RefreshToken, Wallet, UserDevice, Profile]),
+    forwardRef(() => UsersModule),
+    forwardRef(() => WalletsModule),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get('auth.jwtSecret'),
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: configService.get('auth.jwtExpiry', '1d'),
+          expiresIn: configService.get<string>('JWT_EXPIRATION', '1h'),
         },
       }),
+      inject: [ConfigService],
     }),
+    ReferralModule,
+    MailModule,
+    SharedModule,
+    forwardRef(() => BlockchainModule),
+    forwardRef(() => TokenModule), // Make sure TokenModule is imported with forwardRef to prevent circular dependency issues
+    WalletsModule,
+    forwardRef(() => ProfileModule),
+    SessionSecurityModule,
   ],
-  controllers: [AuthController, WalletAuthController, Web3AuthController],
+  controllers: [
+    AuthController,
+    WalletAuthController,
+    WalletAuthDebugController,
+  ],
   providers: [
     AuthService,
-    WalletAuthService,
-    Web3AuthService,
     JwtStrategy,
     LocalStrategy,
     WalletStrategy,
+    UserDevicesService,
+    UserSessionsService, // Add UserSessionsService for session security
+    DeviceDetectorService,
+    WalletTransactionService,
+    TokenService, // Ensure TokenService is explicitly provided here
+    {
+      provide: APP_GUARD,
+      useClass: SessionSecurityGuard,
+    },
   ],
-  exports: [AuthService, WalletAuthService, Web3AuthService],
-})
+  exports: [AuthService, JwtModule, WalletTransactionService, TokenService],
 })
 export class AuthModule {}

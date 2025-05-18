@@ -1,4 +1,4 @@
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, ExecutionContext } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
@@ -9,31 +9,18 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  /**
-   * Check if the route should be accessible without authentication
-   */
   canActivate(context: ExecutionContext) {
-    // Check if route is marked as public
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    // Check if endpoint is marked as public
+    const isPublic = this.reflector.getAllAndOverride<boolean>(
+      IS_PUBLIC_KEY,
+      [context.getHandler(), context.getClass()],
+    );
 
     if (isPublic) {
-      return true;
+      return true; // Skip authentication for public endpoints
     }
 
-    // Otherwise proceed with JWT validation
+    // For protected endpoints, continue with JWT authentication
     return super.canActivate(context);
-  }
-
-  /**
-   * Handle unauthorized access
-   */
-  handleRequest(err, user, info) {
-    if (err || !user) {
-      throw err || new UnauthorizedException('Authentication required');
-    }
-    return user;
   }
 }

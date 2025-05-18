@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { WalletConnection } from './wallet-connection.entity';
+import { Session } from '../../auth/entities/session.entity';
 
 @Entity('users')
 export class User {
@@ -28,8 +29,20 @@ export class User {
   @Column({ nullable: true })
   profilePictureUrl: string;
 
-  @OneToMany(() => WalletConnection, walletConnection => walletConnection.user)
+  @OneToMany(() => WalletConnection, (walletConnection: WalletConnection) => walletConnection.user)
   walletConnections: WalletConnection[];
+
+  @OneToMany(() => Session, (session: Session) => session.user)
+  sessions: Session[];
+
+  @Column({ nullable: true })
+  walletAddress: string;
+
+  @Column({ nullable: true })
+  chainId: string;
+
+  @Column({ nullable: true })
+  firstLoginAt: Date;
 
   @Column({ nullable: true })
   lastLoginAt: Date;
@@ -42,4 +55,5 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+}
 }
