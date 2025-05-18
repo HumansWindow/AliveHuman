@@ -1,5 +1,4 @@
 # AliveHuman
-<<<<<<< HEAD
 
 A comprehensive platform with web, admin, and mobile applications built on a monorepo architecture.
 
@@ -74,7 +73,10 @@ This project uses GitHub for version control and CI/CD:
 
 ## Docker Support
 
+The project includes Docker configuration for development and deployment environments.
+
+## Repository
+
+This project is hosted on GitHub: [HumansWindow/AliveHuman](https://github.com/HumansWindow/AliveHuman)
+
 For detailed documentation, see the Doqs directory.
-=======
-this is a monorepo version of alivehuman
->>>>>>> origin/main
