@@ -43,8 +43,22 @@ branches:
     protection:
       required_pull_request_reviews:
         required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: true
       required_status_checks:
         strict: true
         contexts: ["lint", "test", "build"]
       enforce_admins: true
+      restrictions: null
+  
+  - name: develop
+    protection:
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: true
+      required_status_checks:
+        strict: true
+        contexts: ["lint", "test", "build"]
+      enforce_admins: false
       restrictions: null
