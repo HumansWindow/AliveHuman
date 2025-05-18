@@ -1,0 +1,25 @@
+# Default owners for everything in the repo
+* @AliveHuman/core-team
+
+# Backend specific files
+/packages/backend/ @AliveHuman/backend-team
+
+# Frontend specific files
+/packages/frontend/ @AliveHuman/frontend-team
+
+# Shared package files
+/packages/shared/ @AliveHuman/core-team
+
+# Admin dashboard
+/packages/admin/ @AliveHuman/admin-team
+
+# Mobile app
+/packages/mobile/ @AliveHuman/mobile-team
+
+# Documentation
+/Doqs/ @AliveHuman/core-team
+
+# DevOps and CI/CD
+/docker/ @AliveHuman/devops-team
+/scripts/ @AliveHuman/devops-team
+/.github/ @AliveHuman/devops-team

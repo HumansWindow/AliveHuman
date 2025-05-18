@@ -1,0 +1,8 @@
+# .git-blame-ignore-revs
+# This file contains a list of commits that are not likely what you're looking for in a blame.
+# This includes mass reformatting and mass refactors, that don't change functionality.
+# Add a commit to this file with a small description for context
+# Format: HASH # description (date)
+
+# To use this file locally add the following to your git config or run:
+# git config blame.ignoreRevsFile .git-blame-ignore-revs

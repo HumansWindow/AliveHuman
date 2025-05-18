@@ -1,0 +1,67 @@
+name: Feature Request
+description: Suggest an idea for this project
+title: "[FEATURE]: "
+labels: ["enhancement", "triage"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a new feature!
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of what you want to happen.
+      placeholder: Describe the feature you'd like to see implemented.
+    validations:
+      required: true
+  - type: textarea
+    id: problem-solution
+    attributes:
+      label: Problem and Solution
+      description: Describe the problem this feature would solve or the value it would add.
+      placeholder: This feature would help users to...
+    validations:
+      required: true
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      description: Which package would this feature be part of?
+      options:
+        - backend
+        - frontend
+        - admin
+        - mobile
+        - shared
+        - other (please specify in the description)
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important do you think this feature is?
+      options:
+        - Critical (blocking functionality)
+        - High (major improvement)
+        - Medium (significant enhancement)
+        - Low (nice to have)
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative solutions or features?
+      placeholder: I've also thought about implementing...
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this feature request, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

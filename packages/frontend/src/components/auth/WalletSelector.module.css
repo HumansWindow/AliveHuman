@@ -1,0 +1,150 @@
+.walletSelector {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.providerList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.providerButton {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.providerButton:hover:not(:disabled) {
+  border-color: #8247e5; /* Polygon color */
+  background-color: #f9f6ff;
+}
+
+.providerButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.providerIcon {
+  width: 32px;
+  height: 32px;
+  margin-right: 16px;
+  object-fit: contain;
+}
+
+.providerInfo {
+  flex: 1;
+}
+
+.providerInfo h3 {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+  color: #333;
+}
+
+.providerInfo p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.notInstalled {
+  display: inline-block;
+  background-color: #f2f2f2;
+  color: #666;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.error {
+  background-color: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 6px;
+  padding: 12px;
+  color: #cf1322;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.connecting {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 24px 0;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #8247e5; /* Polygon color */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.cancelButton {
+  background-color: transparent;
+  border: 1px solid #d9d9d9;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.cancelButton:hover:not(:disabled) {
+  border-color: #8247e5; /* Polygon color */
+  color: #8247e5;
+}
+
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

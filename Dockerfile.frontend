@@ -1,0 +1,60 @@
+FROM node:20-alpine AS base
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies only when needed
+FROM base AS deps
+COPY package.json yarn.lock ./
+COPY packages/shared/package.json ./packages/shared/package.json
+COPY packages/frontend/package.json ./packages/frontend/package.json
+
+RUN yarn install --frozen-lockfile
+
+# Rebuild the source code only when needed
+FROM base AS builder
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Build the project
+RUN yarn workspace @alive-human/shared build && \
+    yarn workspace @alive-human/frontend build
+
+# Production image, copy all the files and run the app
+FROM base AS runner
+
+# Don't run production as root
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+USER nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /app/packages/shared/dist /app/packages/shared/dist
+COPY --from=builder --chown=nextjs:nodejs /app/packages/shared/package.json /app/packages/shared/package.json
+COPY --from=builder --chown=nextjs:nodejs /app/packages/frontend/.next /app/packages/frontend/.next
+COPY --from=builder --chown=nextjs:nodejs /app/packages/frontend/public /app/packages/frontend/public
+COPY --from=builder --chown=nextjs:nodejs /app/packages/frontend/package.json /app/packages/frontend/package.json
+COPY --from=builder --chown=nextjs:nodejs /app/packages/frontend/next.config.js /app/packages/frontend/next.config.js
+
+WORKDIR /app/packages/frontend
+
+ENV NODE_ENV production
+
+EXPOSE 3000
+
+CMD ["yarn", "start"]
+
+# Development stage for hot reloading
+FROM base AS development
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+WORKDIR /app
+
+# Set environment variables
+ENV NODE_ENV development
+
+# Expose port
+EXPOSE 3000
+
+# Run development mode with hot reloading
+CMD ["yarn", "workspace", "@alive-human/frontend", "dev"]
