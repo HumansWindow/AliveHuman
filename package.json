@@ -1,0 +1,30 @@
+{
+  "name": "alive-human",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "yarn workspaces foreach -p run dev",
+    "build": "yarn workspaces foreach -p run build",
+    "test": "yarn workspaces foreach -p run test",
+    "lint": "yarn workspaces foreach -p run lint",
+    "clean": "yarn workspaces foreach -p run clean",
+    "git:setup": "./scripts/github.sh setup",
+    "git:feature": "./scripts/github.sh feature",
+    "git:bugfix": "./scripts/github.sh bugfix",
+    "git:pr": "./scripts/github.sh pr",
+    "git:update": "./scripts/github.sh update"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.2"
+  }
+}
